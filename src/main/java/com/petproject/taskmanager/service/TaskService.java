@@ -31,9 +31,12 @@ public class TaskService {
     private final TaskMapper taskMapper;
     private final MongoTemplate mongoTemplate;
     private final UserService userService;
+    private final NotificationSenderService notificationSenderService;
 
     private static final String CREATE_TASK = "CREATE_TASK";
     private static final String ASSIGN_TASK = "ASSIGN_TASK";
+    private static final String ASSIGN_TASK_MESSAGE = "The task %s is assigned to you";
+    private static final String ASSIGN_TASK_SUBJECT = "New task assigned";
 
     @Transactional
     @ActivityLog(activityName = CREATE_TASK, description = "Create a new task")
@@ -82,6 +85,8 @@ public class TaskService {
 
         taskEntity.setExecutorId(user.getId());
         taskEntity.setStatus(TaskStatusEnum.IN_PROGRESS);
+        String message = String.format(ASSIGN_TASK_MESSAGE, taskEntity.getTitle());
+        notificationSenderService.send(user.getEmail(), message, ASSIGN_TASK_SUBJECT);
         return updateTask(taskMapper.toTaskDto(taskEntity));
     }
 

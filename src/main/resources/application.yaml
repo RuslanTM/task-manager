@@ -20,6 +20,12 @@ spring:
     password: password
   cache:
     type: redis
+  kafka:
+    bootstrap:
+      servers: localhost:9092
+    topic:
+      name: notifications
+
 
 logging:
   level:

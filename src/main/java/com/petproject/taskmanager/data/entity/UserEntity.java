@@ -19,6 +19,8 @@ public class UserEntity implements Serializable {
 
     private String password;
 
+    private String email;
+
     private List<String> createdTaskIds;
 
     private List<String> assignedTaskIds;
